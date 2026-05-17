@@ -80,7 +80,7 @@ def health():
     return {"status": "healthy"}
 
 
-@app.get("/api/notes", response_model=list[Note])
+@app.get("/notes", response_model=list[Note])
 def list_notes():
     with get_db() as conn:
         rows = conn.execute(
@@ -89,7 +89,7 @@ def list_notes():
         return [dict(r) for r in rows]
 
 
-@app.post("/api/notes", response_model=Note, status_code=201)
+@app.post("/notes", response_model=Note, status_code=201)
 def create_note(note: NoteIn):
     created_at = datetime.utcnow().isoformat()
     with get_db() as conn:
@@ -106,7 +106,7 @@ def create_note(note: NoteIn):
         }
 
 
-@app.get("/api/notes/{note_id}", response_model=Note)
+@app.get("/notes/{note_id}", response_model=Note)
 def get_note(note_id: int):
     with get_db() as conn:
         row = conn.execute(
@@ -118,7 +118,7 @@ def get_note(note_id: int):
         return dict(row)
 
 
-@app.delete("/api/notes/{note_id}", status_code=204)
+@app.delete("/notes/{note_id}", status_code=204)
 def delete_note(note_id: int):
     with get_db() as conn:
         cur = conn.execute("DELETE FROM notes WHERE id = ?", (note_id,))
